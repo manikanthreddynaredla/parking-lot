@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parking Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-page">
+
+  <main class="dashboard-shell">
+    <header class="dashboard-header">
+      <div>
+        <p class="dashboard-kicker">Parking Dashboard</p>
+        <h1>Choose an action</h1>
+      </div>
+      <div class="lot-pill">
+        Lot ID: <span id="activeLotId">-</span>
+      </div>
+    </header>
+
+    <section class="dashboard-actions" aria-label="Parking actions">
+      <button class="action-tile checkin" type="button" onclick="openCheckin()">
+        <span class="tile-icon" aria-hidden="true">IN</span>
+        <span class="tile-title">Check-In</span>
+        <span class="tile-copy">Add a vehicle to this parking lot</span>
+      </button>
+
+      <button class="action-tile checkout" type="button" onclick="openCheckout()">
+        <span class="tile-icon" aria-hidden="true">OUT</span>
+        <span class="tile-title">Check-Out</span>
+        <span class="tile-copy">Release a checked-in vehicle</span>
+      </button>
+    </section>
+  </main>
+
+  <div id="modalOverlay" class="modal-overlay hidden" onclick="closePopup()"></div>
+
+  <section id="messagePopup" class="message-popup hidden" role="alertdialog" aria-labelledby="messageTitle" aria-describedby="messageText">
+    <div class="message-icon" id="messageIcon" aria-hidden="true">!</div>
+    <div>
+      <h2 id="messageTitle">Validation</h2>
+      <p id="messageText"></p>
+      <button type="button" onclick="closeMessage()">OK</button>
+    </div>
+  </section>
+
+  <section id="checkinPopup" class="popup hidden" aria-labelledby="checkin-title" role="dialog" aria-modal="true">
+    <div class="popup-header">
+      <h2 id="checkin-title">Check-In</h2>
+      <button class="close-btn" type="button" onclick="closePopup()" aria-label="Close">x</button>
+    </div>
+
+    <label for="lot_id_checkin">Lot ID</label>
+    <input id="lot_id_checkin" readonly>
+
+    <label for="vehicle_no_checkin">Vehicle Number</label>
+    <input id="vehicle_no_checkin" placeholder="Example: AP09AB1234">
+
+    <label for="four_no_checkin">Four Digit Number</label>
+    <input id="four_no_checkin" maxlength="4" inputmode="numeric" placeholder="Enter 4 digits">
+
+    <button class="primary-btn" type="button" onclick="submitCheckin()">Submit Check-In</button>
+  </section>
+
+  <section id="checkoutPopup" class="popup hidden" aria-labelledby="checkout-title" role="dialog" aria-modal="true">
+    <div class="popup-header">
+      <h2 id="checkout-title">Check-Out</h2>
+      <button class="close-btn" type="button" onclick="closePopup()" aria-label="Close">x</button>
+    </div>
+
+    <label for="lot_id_checkout">Lot ID</label>
+    <input id="lot_id_checkout" readonly>
+
+    <label for="vehicle_no_checkout">Vehicle Number</label>
+    <input id="vehicle_no_checkout" placeholder="Example: AP09AB1234">
+
+    <label for="four_no_checkout">Four Digit Number</label>
+    <input id="four_no_checkout" maxlength="4" inputmode="numeric" placeholder="Enter 4 digits">
+
+    <button class="primary-btn" type="button" onclick="submitCheckout()">Submit Check-Out</button>
+
+    <div id="checkoutDuration" class="duration-result hidden" aria-live="polite">
+      <span>Parking Duration</span>
+      <strong id="checkoutDurationValue">0 hours 0 minutes</strong>
+    </div>
+  </section>
+
+<script src="dashboard.js"></script>
+</body>
+</html>

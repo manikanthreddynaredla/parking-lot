@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parking Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+
+  <main class="login-shell">
+    <section class="login-card" aria-labelledby="login-title">
+      <div class="login-brand">
+        <span class="login-icon" aria-hidden="true">P</span>
+        <div>
+          <p class="login-kicker">Parking Access</p>
+          <h1 id="login-title">Sign in</h1>
+        </div>
+      </div>
+
+      <div class="login-form">
+        <label for="lot_id">Lot ID</label>
+        <input type="text" id="lot_id" placeholder="Enter lot ID" autocomplete="organization">
+
+        <label for="user_id">User ID</label>
+        <input type="text" id="user_id" placeholder="Enter user ID" autocomplete="username">
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
+
+        <button type="button" onclick="login()">Login</button>
+      </div>
+    </section>
+  </main>
+
+  <section id="messagePopup" class="message-popup hidden" role="alertdialog" aria-labelledby="messageTitle" aria-describedby="messageText">
+    <div class="message-icon" id="messageIcon" aria-hidden="true">!</div>
+    <div>
+      <h2 id="messageTitle">Validation</h2>
+      <p id="messageText"></p>
+      <button type="button" onclick="closeMessage()">OK</button>
+    </div>
+  </section>
+
+<script src="login.js"></script>
+</body>
+</html>
