@@ -21,5 +21,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, HOST, () => {
-  console.log(`Server running on http://192.168.0.150:${PORT}`);
+  console.log(`Server running on http://<EC2-PUBLIC-IP>:${PORT}`);
 });
