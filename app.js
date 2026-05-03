@@ -23,4 +23,13 @@ app.get('/', (req, res) => {
 app.listen(PORT, HOST, () => {
   console.log(`Server running on http://<EC2-PUBLIC-IP>:${PORT}`);
 });
+const pool = require('./config/db'); // adjust path if needed
 
+(async () => {
+  try {
+    const result = await pool.query('SELECT * FROM users');
+    console.log("✅ USERS DATA:", result.rows);
+  } catch (err) {
+    console.error("❌ ERROR:", err.message);
+  }
+})();
