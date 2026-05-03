@@ -1,5 +1,4 @@
 const lotId = localStorage.getItem("lot_id");
-const apiBaseUrl = `${window.location.origin}/api/auth`;
 
 document.addEventListener("DOMContentLoaded", () => {
   if (!lotId) {
@@ -81,7 +80,7 @@ function validateParkingForm(vehicleNo, fourNo) {
 }
 
 // API CALLS
-function submitCheckin() {
+async function submitCheckin() {
   const vehicleNo = document.getElementById("vehicle_no_checkin").value.trim().toUpperCase();
   const fourNo = document.getElementById("four_no_checkin").value.trim();
 
@@ -89,29 +88,35 @@ function submitCheckin() {
     return;
   }
 
-  fetch(`${apiBaseUrl}/checkin`, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      lot_id: lotId,
-      vehicle_no: vehicleNo,
-      four_no: fourNo
+  try {
+    const checkinUrl = await buildApiUrl("/checkin");
+
+    fetch(checkinUrl, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        lot_id: lotId,
+        vehicle_no: vehicleNo,
+        four_no: fourNo
+      })
     })
-  })
-  .then(async (res) => {
-    const data = await res.json().catch(() => ({}));
+    .then(async (res) => {
+      const data = await res.json().catch(() => ({}));
 
-    if (!res.ok) {
-      throw new Error(data.message || data.error || "Check-In failed");
-    }
+      if (!res.ok) {
+        throw new Error(data.message || data.error || "Check-In failed");
+      }
 
-    closePopup();
-    showMessage("Check-In successful", data.message || "Vehicle checked in successfully.", "success");
-  })
-  .catch((err) => showMessage("Check-In failed", err.message));
+      closePopup();
+      showMessage("Check-In successful", data.message || "Vehicle checked in successfully.", "success");
+    })
+    .catch((err) => showMessage("Check-In failed", err.message));
+  } catch (err) {
+    showMessage("Check-In failed", err.message);
+  }
 }
 
-function submitCheckout() {
+async function submitCheckout() {
   const vehicleNo = document.getElementById("vehicle_no_checkout").value.trim().toUpperCase();
   const fourNo = document.getElementById("four_no_checkout").value.trim();
 
@@ -119,29 +124,35 @@ function submitCheckout() {
     return;
   }
 
-  fetch(`${apiBaseUrl}/checkout`, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      lot_id: lotId,
-      vehicle_no: vehicleNo,
-      four_no: fourNo
+  try {
+    const checkoutUrl = await buildApiUrl("/checkout");
+
+    fetch(checkoutUrl, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        lot_id: lotId,
+        vehicle_no: vehicleNo,
+        four_no: fourNo
+      })
     })
-  })
-  .then(async (res) => {
-    const data = await res.json().catch(() => ({}));
+    .then(async (res) => {
+      const data = await res.json().catch(() => ({}));
 
-    if (!res.ok) {
-      throw new Error(data.message || data.error || "Check-Out failed");
-    }
+      if (!res.ok) {
+        throw new Error(data.message || data.error || "Check-Out failed");
+      }
 
-    const duration = data.duration || { hours: 0, minutes: 0 };
-    const hours = Number(duration.hours) || 0;
-    const minutes = Number(duration.minutes) || 0;
+      const duration = data.duration || { hours: 0, minutes: 0 };
+      const hours = Number(duration.hours) || 0;
+      const minutes = Number(duration.minutes) || 0;
 
-    document.getElementById("checkoutDurationValue").textContent = `${hours} hours ${minutes} minutes`;
-    document.getElementById("checkoutDuration").classList.remove("hidden");
-    showMessage("Check-Out successful", data.message || "Vehicle checked out successfully.", "success");
-  })
-  .catch((err) => showMessage("Check-Out failed", err.message));
+      document.getElementById("checkoutDurationValue").textContent = `${hours} hours ${minutes} minutes`;
+      document.getElementById("checkoutDuration").classList.remove("hidden");
+      showMessage("Check-Out successful", data.message || "Vehicle checked out successfully.", "success");
+    })
+    .catch((err) => showMessage("Check-Out failed", err.message));
+  } catch (err) {
+    showMessage("Check-Out failed", err.message);
+  }
 }

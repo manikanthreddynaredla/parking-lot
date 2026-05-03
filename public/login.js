@@ -12,7 +12,7 @@ function closeMessage() {
   document.getElementById("messagePopup").classList.add("hidden");
 }
 
-function login() {
+async function login() {
   const lot_id = document.getElementById("lot_id").value.trim();
   const user_id = document.getElementById("user_id").value.trim();
   const password = document.getElementById("password").value;
@@ -22,28 +22,34 @@ function login() {
     return;
   }
 
-  fetch("http://192.168.0.150:3000/api/auth/login", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      lot_id,
-      user_id,
-      password
+  try {
+    const loginUrl = await buildApiUrl("/login");
+
+    fetch(loginUrl, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        lot_id,
+        user_id,
+        password
+      })
     })
-  })
-  .then(async (res) => {
-    const data = await res.json().catch(() => ({}));
+    .then(async (res) => {
+      const data = await res.json().catch(() => ({}));
 
-    if (!res.ok) {
-      throw new Error(data.message || data.error || "Login Failed");
-    }
+      if (!res.ok) {
+        throw new Error(data.message || data.error || "Login Failed");
+      }
 
-    // store lot_id
-    localStorage.setItem("lot_id", lot_id);
-    localStorage.setItem("user_id", user_id);
+      // store lot_id
+      localStorage.setItem("lot_id", lot_id);
+      localStorage.setItem("user_id", user_id);
 
-    // navigate to dashboard
-    window.location.href = "dashboard.html";
-  })
-  .catch((err) => showMessage("Login failed", err.message));
+      // navigate to dashboard
+      window.location.href = "dashboard.html";
+    })
+    .catch((err) => showMessage("Login failed", err.message));
+  } catch (err) {
+    showMessage("Login failed", err.message);
+  }
 }

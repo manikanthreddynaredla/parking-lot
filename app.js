@@ -13,6 +13,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/api/config', (req, res) => {
+  const fallbackApiBaseUrl = `${req.protocol}://${req.get('host')}/api/auth`;
+
+  res.json({
+    apiBaseUrl: process.env.API_BASE_URL || fallbackApiBaseUrl,
+  });
+});
+
 app.use('/api/auth', authRoutes);
 
 // default route -> login page
