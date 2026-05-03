@@ -23,13 +23,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, HOST, () => {
   console.log(`Server running on http://<EC2-PUBLIC-IP>:${PORT}`);
 });
-const pool = require('./config/db'); // your file
 
-(async () => {
-  try {
-    const res = await pool.query('SELECT NOW()');
-    console.log('✅ DB Connected:', res.rows[0]);
-  } catch (err) {
-    console.error('❌ DB Connection Failed:', err.message);
-  }
-})();
